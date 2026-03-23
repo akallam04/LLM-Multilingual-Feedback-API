@@ -8,7 +8,7 @@ Given a sentence, a target language, and the learner’s native language, the AP
 - a correctness flag
 - a CEFR difficulty estimate
 
-This project was built for the Pangea Chat Gen AI Intern Task and was designed to balance accuracy, reliability, speed, and production feasibility.
+This project was designed to balance accuracy, reliability, speed, and production feasibility.
 
 ## Overview
 
@@ -114,8 +114,8 @@ The project includes:
 ## Run Locally
 
 ```bash
-git clone https://github.com/akallam04/intern-task-2026.git
-cd intern-task-2026
+git clone https://github.com/akallam04/LLM-Multilingual-Feedback-API.git
+cd LLM-Multilingual-Feedback-API
 
 python3 -m venv .venv
 source .venv/bin/activate
