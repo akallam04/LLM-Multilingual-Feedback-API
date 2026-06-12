@@ -4,7 +4,8 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - .env
+      - path: .env
+        required: false # starts in keyless demo mode without one
     healthcheck:
       test:
         [
