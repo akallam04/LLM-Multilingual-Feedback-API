@@ -33,13 +33,18 @@ class ErrorDetail(BaseModel):
 
 class FeedbackRequest(BaseModel):
     sentence: str = Field(
-        min_length=1, description="The learner's sentence in the target language"
+        min_length=1,
+        max_length=1000,
+        description="The learner's sentence in the target language",
     )
     target_language: str = Field(
-        min_length=2, description="The language the learner is studying"
+        min_length=2,
+        max_length=60,
+        description="The language the learner is studying",
     )
     native_language: str = Field(
         min_length=2,
+        max_length=60,
         description="The learner's native language -- explanations will be in this language",
     )
 

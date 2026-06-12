@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Feedback API</title>
+<style>
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --ink: #1f2a2e;
+    --muted: #5f6f74;
+    --line: #e5ded2;
+    --accent: #0e6b66;
+    --accent-soft: #e3f0ef;
+    --good: #1a7f4b;
+    --good-soft: #e4f4ea;
+    --bad: #b3413c;
+    --bad-soft: #fbe9e7;
+    --warn-soft: #fdf3dc;
+    --warn-ink: #7a5a14;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 40px 20px 80px; }
+  header h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 2.1rem;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+  }
+  header p.tagline { color: var(--muted); margin: 0 0 14px; max-width: 60ch; }
+  .meta-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 26px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.78rem; font-weight: 600;
+    padding: 4px 11px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid transparent;
+  }
+  .chip.demo { background: var(--warn-soft); color: var(--warn-ink); }
+  .chip a { color: inherit; text-decoration: none; }
+  .banner {
+    display: none;
+    background: var(--warn-soft); color: var(--warn-ink);
+    border: 1px solid #ecd9a8; border-radius: 10px;
+    padding: 12px 16px; margin-bottom: 24px; font-size: 0.92rem;
+  }
+  .banner.visible { display: block; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(31, 42, 46, 0.05);
+  }
+  label { display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 6px; }
+  textarea, input[type="text"] {
+    width: 100%; font: inherit; color: inherit;
+    background: #fffdf9;
+    border: 1px solid var(--line); border-radius: 9px;
+    padding: 10px 12px;
+  }
+  textarea { resize: vertical; min-height: 76px; }
+  textarea:focus, input:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: var(--accent); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  .examples { margin: 18px 0 4px; }
+  .examples span.lbl { font-size: 0.82rem; color: var(--muted); margin-right: 8px; }
+  .ex {
+    display: inline-block; margin: 4px 6px 0 0;
+    font-size: 0.8rem; padding: 5px 11px;
+    background: var(--bg); border: 1px solid var(--line); border-radius: 999px;
+    cursor: pointer; color: var(--ink);
+  }
+  .ex:hover { border-color: var(--accent); color: var(--accent); }
+  button.submit {
+    margin-top: 20px;
+    font: inherit; font-weight: 600;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 9px;
+    padding: 11px 26px; cursor: pointer;
+  }
+  button.submit:hover { background: #0a5550; }
+  button.submit:disabled { opacity: 0.55; cursor: wait; }
+  #result { margin-top: 28px; display: none; }
+  #result.visible { display: block; }
+  .verdict { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .verdict .state { font-weight: 700; font-size: 1.05rem; }
+  .state.ok { color: var(--good); }
+  .state.err { color: var(--bad); }
+  .badge {
+    font-size: 0.75rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 999px;
+  }
+  .badge.cefr { background: var(--accent-soft); color: var(--accent); }
+  .badge.latency { background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+  .sentence-box {
+    font-size: 1.12rem; line-height: 1.7;
+    background: #fffdf9; border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .sentence-box del { color: var(--bad); background: var(--bad-soft); text-decoration: line-through; border-radius: 4px; padding: 0 3px; }
+  .sentence-box ins { color: var(--good); background: var(--good-soft); text-decoration: none; font-weight: 600; border-radius: 4px; padding: 0 3px; }
+  .errors { margin-top: 18px; display: grid; gap: 12px; }
+  .error-card {
+    border: 1px solid var(--line); border-left: 4px solid var(--bad);
+    border-radius: 10px; padding: 13px 16px; background: var(--card);
+  }
+  .error-card .fix { font-family: var(--mono); font-size: 0.93rem; margin-bottom: 6px; }
+  .error-card .fix .from { color: var(--bad); text-decoration: line-through; }
+  .error-card .fix .to { color: var(--good); font-weight: 600; }
+  .error-card .type {
+    display: inline-block; font-size: 0.7rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    background: var(--bad-soft); color: var(--bad);
+    padding: 2px 8px; border-radius: 999px; margin-bottom: 6px;
+  }
+  .error-card .why { font-size: 0.93rem; color: var(--ink); margin: 0; }
+  details.raw { margin-top: 18px; }
+  details.raw summary { cursor: pointer; font-size: 0.85rem; color: var(--muted); }
+  details.raw pre {
+    background: #20292d; color: #d8e2e6;
+    border-radius: 10px; padding: 14px; overflow-x: auto;
+    font-family: var(--mono); font-size: 0.82rem;
+  }
+  .fail {
+    display: none;
+    margin-top: 20px; padding: 13px 16px;
+    background: var(--bad-soft); color: var(--bad);
+    border: 1px solid #eccfcc; border-radius: 10px; font-size: 0.93rem;
+  }
+  .fail.visible { display: block; }
+  footer { margin-top: 36px; font-size: 0.85rem; color: var(--muted); }
+  footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Language Feedback API</h1>
+    <p class="tagline">Write a sentence in the language you are learning and get a minimal correction, categorized errors explained in your native language, and a CEFR difficulty estimate.</p>
+    <div class="meta-row">
+      <span class="chip" id="provider-chip">checking provider...</span>
+      <span class="chip"><a href="/docs">API docs</a></span>
+      <span class="chip"><a href="https://github.com/akallam04/LLM-Multilingual-Feedback-API" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </header>
+
+  <div class="banner" id="demo-banner">
+    <strong>Demo mode.</strong> No API key is configured, so responses are canned samples rather than real analysis. The example sentences below return curated feedback. Set OPENAI_API_KEY or ANTHROPIC_API_KEY in your .env file for live feedback.
+  </div>
+
+  <div class="card">
+    <form id="feedback-form">
+      <label for="sentence">Your sentence</label>
+      <textarea id="sentence" required maxlength="1000" placeholder="Yo soy fue al mercado ayer."></textarea>
+
+      <div class="grid">
+        <div>
+          <label for="target">Language you are learning</label>
+          <input type="text" id="target" list="langs" required maxlength="60" placeholder="Spanish">
+        </div>
+        <div>
+          <label for="native">Your native language</label>
+          <input type="text" id="native" list="langs" required maxlength="60" placeholder="English">
+        </div>
+      </div>
+      <datalist id="langs">
+        <option>English</option><option>Spanish</option><option>French</option>
+        <option>German</option><option>Portuguese</option><option>Italian</option>
+        <option>Japanese</option><option>Korean</option><option>Mandarin Chinese</option>
+        <option>Hindi</option><option>Telugu</option><option>Arabic</option>
+        <option>Russian</option><option>Turkish</option><option>Vietnamese</option>
+      </datalist>
+
+      <div class="examples">
+        <span class="lbl">Try an example:</span>
+        <span id="example-chips"></span>
+      </div>
+
+      <button type="submit" class="submit" id="submit-btn">Check my sentence</button>
+    </form>
+
+    <div class="fail" id="fail-box"></div>
+
+    <div id="result" aria-live="polite">
+      <div class="verdict">
+        <span class="state" id="state"></span>
+        <span class="badge cefr" id="cefr"></span>
+        <span class="badge latency" id="latency"></span>
+      </div>
+      <div class="sentence-box" id="diff"></div>
+      <div class="errors" id="errors"></div>
+      <details class="raw">
+        <summary>View raw JSON response</summary>
+        <pre id="raw-json"></pre>
+      </details>
+    </div>
+  </div>
+
+  <footer>
+    Built with FastAPI and pluggable LLM providers (OpenAI, Anthropic, or keyless demo mode).
+    Interactive API reference at <a href="/docs">/docs</a>.
+  </footer>
+</div>
+
+<script>
+const EXAMPLES = [
+  { label: "Spanish: mixed verbs", sentence: "Yo soy fue al mercado ayer.", target: "Spanish", native: "English" },
+  { label: "French: gender", sentence: "La chat noir est sur le table.", target: "French", native: "English" },
+  { label: "Japanese: particle", sentence: "私は東京を住んでいます。", target: "Japanese", native: "English" },
+  { label: "German: correct", sentence: "Ich habe gestern einen interessanten Film gesehen.", target: "German", native: "English" },
+  { label: "Portuguese: spelling", sentence: "Eu quero comprar um prezente para minha irmã, mas não sei o que ela gosta.", target: "Portuguese", native: "English" },
+  { label: "Hindi: gender", sentence: "वह एक अच्छा लड़की है।", target: "Hindi", native: "English" },
+  { label: "Italian: article", sentence: "Io ho mangiato una panino.", target: "Italian", native: "English" },
+];
+
+const $ = (id) => document.getElementById(id);
+
+function renderExamples() {
+  const holder = $("example-chips");
+  EXAMPLES.forEach((ex) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "ex";
+    b.textContent = ex.label;
+    b.addEventListener("click", () => {
+      $("sentence").value = ex.sentence;
+      $("target").value = ex.target;
+      $("native").value = ex.native;
+      $("sentence").focus();
+    });
+    holder.appendChild(b);
+  });
+}
+
+async function loadHealth() {
+  try {
+    const res = await fetch("/health");
+    const h = await res.json();
+    const chip = $("provider-chip");
+    if (h.demo_mode) {
+      chip.textContent = "demo mode (no API key)";
+      chip.classList.add("demo");
+      $("demo-banner").classList.add("visible");
+    } else {
+      chip.textContent = h.provider + " / " + h.model;
+    }
+  } catch {
+    $("provider-chip").textContent = "provider unknown";
+  }
+}
+
+// Word-level LCS diff between original and corrected sentence.
+function diffWords(a, b) {
+  const A = a.split(/\s+/).filter(Boolean);
+  const B = b.split(/\s+/).filter(Boolean);
+  const n = A.length, m = B.length;
+  const dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+  for (let i = n - 1; i >= 0; i--) {
+    for (let j = m - 1; j >= 0; j--) {
+      dp[i][j] = A[i] === B[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    }
+  }
+  const ops = [];
+  let i = 0, j = 0;
+  while (i < n && j < m) {
+    if (A[i] === B[j]) { ops.push(["same", A[i]]); i++; j++; }
+    else if (dp[i + 1][j] >= dp[i][j + 1]) { ops.push(["del", A[i]]); i++; }
+    else { ops.push(["ins", B[j]]); j++; }
+  }
+  while (i < n) { ops.push(["del", A[i++]]); }
+  while (j < m) { ops.push(["ins", B[j++]]); }
+  return ops;
+}
+
+function renderDiff(original, corrected, isCorrect) {
+  const box = $("diff");
+  box.textContent = "";
+  if (isCorrect) {
+    box.textContent = corrected;
+    return;
+  }
+  diffWords(original, corrected).forEach(([op, word], idx) => {
+    if (idx > 0) box.appendChild(document.createTextNode(" "));
+    if (op === "same") {
+      box.appendChild(document.createTextNode(word));
+    } else {
+      const el = document.createElement(op === "del" ? "del" : "ins");
+      el.textContent = word;
+      box.appendChild(el);
+    }
+  });
+}
+
+function renderErrors(errors) {
+  const holder = $("errors");
+  holder.textContent = "";
+  errors.forEach((e) => {
+    const card = document.createElement("div");
+    card.className = "error-card";
+
+    const type = document.createElement("span");
+    type.className = "type";
+    type.textContent = e.error_type.replace(/_/g, " ");
+
+    const fix = document.createElement("div");
+    fix.className = "fix";
+    const from = document.createElement("span");
+    from.className = "from";
+    from.textContent = e.original;
+    const to = document.createElement("span");
+    to.className = "to";
+    to.textContent = e.correction;
+    fix.appendChild(from);
+    fix.appendChild(document.createTextNode("  →  "));
+    fix.appendChild(to);
+
+    const why = document.createElement("p");
+    why.className = "why";
+    why.textContent = e.explanation;
+
+    card.appendChild(type);
+    card.appendChild(fix);
+    card.appendChild(why);
+    holder.appendChild(card);
+  });
+}
+
+async function submit(event) {
+  event.preventDefault();
+  const btn = $("submit-btn");
+  btn.disabled = true;
+  btn.textContent = "Checking...";
+  $("fail-box").classList.remove("visible");
+  $("result").classList.remove("visible");
+
+  const body = {
+    sentence: $("sentence").value.trim(),
+    target_language: $("target").value.trim(),
+    native_language: $("native").value.trim(),
+  };
+
+  const started = performance.now();
+  try {
+    const res = await fetch("/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const elapsed = Math.round(performance.now() - started);
+
+    if (!res.ok) {
+      let detail = "Request failed with status " + res.status + ".";
+      try {
+        const err = await res.json();
+        if (typeof err.detail === "string") detail = err.detail;
+        else if (Array.isArray(err.detail) && err.detail[0]?.msg) detail = err.detail[0].msg;
+      } catch { /* keep generic message */ }
+      const box = $("fail-box");
+      box.textContent = detail;
+      box.classList.add("visible");
+      return;
+    }
+
+    const data = await res.json();
+    const state = $("state");
+    if (data.is_correct) {
+      state.textContent = "Looks correct!";
+      state.className = "state ok";
+    } else {
+      const n = data.errors.length;
+      state.textContent = n + (n === 1 ? " issue found" : " issues found");
+      state.className = "state err";
+    }
+    $("cefr").textContent = "CEFR " + data.difficulty;
+    $("latency").textContent = elapsed + " ms";
+    renderDiff(body.sentence, data.corrected_sentence, data.is_correct);
+    renderErrors(data.errors);
+    $("raw-json").textContent = JSON.stringify(data, null, 2);
+    $("result").classList.add("visible");
+  } catch (err) {
+    const box = $("fail-box");
+    box.textContent = "Could not reach the API. Is the server running?";
+    box.classList.add("visible");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Check my sentence";
+  }
+}
+
+// Shareable links: /?sentence=...&target=...&native=...&autorun=1
+function applyUrlParams() {
+  const params = new URLSearchParams(window.location.search);
+  const sentence = params.get("sentence");
+  const target = params.get("target");
+  const native = params.get("native");
+  if (sentence) $("sentence").value = sentence;
+  if (target) $("target").value = target;
+  if (native) $("native").value = native;
+  if (params.get("autorun") === "1" && sentence && target && native) {
+    $("feedback-form").requestSubmit();
+  }
+}
+
+renderExamples();
+loadHealth();
+$("feedback-form").addEventListener("submit", submit);
+applyUrlParams();
+</script>
+</body>
+</html>

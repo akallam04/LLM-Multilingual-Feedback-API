@@ -1,19 +1,34 @@
-"""Integration tests -- require OPENAI_API_KEY to be set.
+"""Integration tests -- make real LLM API calls.
 
-Run with: pytest tests/test_feedback_integration.py -v
+These run against whichever provider is configured (OpenAI or Anthropic)
+and are skipped automatically when no API key is available or when the
+mock provider is selected. Run with:
 
-These tests make real API calls. Skip them in CI or when no key is available.
+    pytest tests/test_feedback_integration.py -v
 """
 
 import os
 
 import pytest
+
 from app.feedback import get_feedback
 from app.models import FeedbackRequest
 
+
+def _real_provider_available() -> bool:
+    explicit = os.getenv("LLM_PROVIDER", "").strip().lower()
+    if explicit == "mock":
+        return False
+    if explicit == "openai":
+        return bool(os.getenv("OPENAI_API_KEY"))
+    if explicit == "anthropic":
+        return bool(os.getenv("ANTHROPIC_API_KEY"))
+    return bool(os.getenv("OPENAI_API_KEY") or os.getenv("ANTHROPIC_API_KEY"))
+
+
 pytestmark = pytest.mark.skipif(
-    not os.getenv("OPENAI_API_KEY"),
-    reason="OPENAI_API_KEY not set -- skipping integration tests",
+    not _real_provider_available(),
+    reason="No LLM API key configured -- skipping integration tests",
 )
 
 VALID_ERROR_TYPES = {

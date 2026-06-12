@@ -5,7 +5,6 @@ from pathlib import Path
 
 import jsonschema
 import pytest
-from app.models import FeedbackRequest, FeedbackResponse
 
 SCHEMA_DIR = Path(__file__).parent.parent / "schema"
 EXAMPLES_DIR = Path(__file__).parent.parent / "examples"
@@ -42,6 +41,18 @@ class TestRequestSchema:
             jsonschema.validate(
                 {
                     "sentence": "",
+                    "target_language": "Spanish",
+                    "native_language": "English",
+                },
+                schema,
+            )
+
+    def test_oversized_sentence_fails(self):
+        schema = load_schema("request.schema.json")
+        with pytest.raises(jsonschema.ValidationError):
+            jsonschema.validate(
+                {
+                    "sentence": "x" * 1001,
                     "target_language": "Spanish",
                     "native_language": "English",
                 },

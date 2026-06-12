@@ -9,16 +9,19 @@
     "sentence": {
       "type": "string",
       "minLength": 1,
+      "maxLength": 1000,
       "description": "The learner's sentence in the target language to analyze"
     },
     "target_language": {
       "type": "string",
       "minLength": 2,
+      "maxLength": 60,
       "description": "The language the learner is studying (e.g., 'Spanish', 'Japanese', 'French')"
     },
     "native_language": {
       "type": "string",
       "minLength": 2,
+      "maxLength": 60,
       "description": "The learner's native language -- explanations will be written in this language (e.g., 'English')"
     }
   }
