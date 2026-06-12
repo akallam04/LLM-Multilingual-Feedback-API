@@ -1,0 +1,484 @@
+[
+  {
+    "id": "es-001",
+    "language": "Spanish",
+    "request": {
+      "sentence": "Yo soy fue al mercado ayer.",
+      "target_language": "Spanish",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Yo fui al mercado ayer."],
+      "acceptable_error_types": ["conjugation", "grammar", "extra_word"]
+    }
+  },
+  {
+    "id": "es-002",
+    "language": "Spanish",
+    "request": {
+      "sentence": "Ella es una buena estudiante.",
+      "target_language": "Spanish",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["Ella es una buena estudiante."],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "es-003",
+    "language": "Spanish",
+    "request": {
+      "sentence": "Me gusta los libros.",
+      "target_language": "Spanish",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Me gustan los libros."],
+      "acceptable_error_types": ["conjugation", "grammar", "number_agreement"]
+    }
+  },
+  {
+    "id": "es-004",
+    "language": "Spanish",
+    "request": {
+      "sentence": "Quiero ir a el cine.",
+      "target_language": "Spanish",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Quiero ir al cine."],
+      "acceptable_error_types": ["grammar", "spelling", "word_choice"]
+    }
+  },
+  {
+    "id": "es-005",
+    "language": "Spanish",
+    "request": {
+      "sentence": "Ayer comí dos manzana.",
+      "target_language": "Spanish",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Ayer comí dos manzanas."],
+      "acceptable_error_types": ["number_agreement", "grammar"]
+    }
+  },
+  {
+    "id": "fr-001",
+    "language": "French",
+    "request": {
+      "sentence": "La chat noir est sur le table.",
+      "target_language": "French",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Le chat noir est sur la table."],
+      "acceptable_error_types": ["gender_agreement", "grammar"]
+    }
+  },
+  {
+    "id": "fr-002",
+    "language": "French",
+    "request": {
+      "sentence": "Je suis allé au cinéma hier soir.",
+      "target_language": "French",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["Je suis allé au cinéma hier soir."],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "fr-003",
+    "language": "French",
+    "request": {
+      "sentence": "Il mange une pomme tous les jours.",
+      "target_language": "French",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["Il mange une pomme tous les jours."],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "fr-004",
+    "language": "French",
+    "request": {
+      "sentence": "Je veux mangé une pizza.",
+      "target_language": "French",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Je veux manger une pizza."],
+      "acceptable_error_types": ["conjugation", "grammar", "spelling"]
+    }
+  },
+  {
+    "id": "fr-005",
+    "language": "French",
+    "request": {
+      "sentence": "Elle a beaucoup des amis.",
+      "target_language": "French",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Elle a beaucoup d'amis."],
+      "acceptable_error_types": ["grammar", "word_choice", "extra_word"]
+    }
+  },
+  {
+    "id": "de-001",
+    "language": "German",
+    "request": {
+      "sentence": "Ich habe gestern einen interessanten Film gesehen.",
+      "target_language": "German",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["Ich habe gestern einen interessanten Film gesehen."],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "de-002",
+    "language": "German",
+    "request": {
+      "sentence": "Ich bin müde.",
+      "target_language": "German",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["Ich bin müde."],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "de-003",
+    "language": "German",
+    "request": {
+      "sentence": "Er gehen zur Schule.",
+      "target_language": "German",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Er geht zur Schule."],
+      "acceptable_error_types": ["conjugation", "grammar"]
+    }
+  },
+  {
+    "id": "de-004",
+    "language": "German",
+    "request": {
+      "sentence": "Ich habe ein Hund.",
+      "target_language": "German",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Ich habe einen Hund."],
+      "acceptable_error_types": ["grammar", "gender_agreement"]
+    }
+  },
+  {
+    "id": "pt-001",
+    "language": "Portuguese",
+    "request": {
+      "sentence": "Eu quero comprar um prezente para minha irmã, mas não sei o que ela gosta.",
+      "target_language": "Portuguese",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": [
+        "Eu quero comprar um presente para minha irmã, mas não sei do que ela gosta.",
+        "Eu quero comprar um presente para minha irmã, mas não sei o que ela gosta."
+      ],
+      "acceptable_error_types": ["spelling", "grammar"]
+    }
+  },
+  {
+    "id": "pt-002",
+    "language": "Portuguese",
+    "request": {
+      "sentence": "Eu gosto de música brasileira.",
+      "target_language": "Portuguese",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["Eu gosto de música brasileira."],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "pt-003",
+    "language": "Portuguese",
+    "request": {
+      "sentence": "Nós vai ao parque amanhã.",
+      "target_language": "Portuguese",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Nós vamos ao parque amanhã."],
+      "acceptable_error_types": ["conjugation", "grammar", "number_agreement"]
+    }
+  },
+  {
+    "id": "it-001",
+    "language": "Italian",
+    "request": {
+      "sentence": "Io ho mangiato una panino.",
+      "target_language": "Italian",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Io ho mangiato un panino."],
+      "acceptable_error_types": ["gender_agreement", "grammar"]
+    }
+  },
+  {
+    "id": "it-002",
+    "language": "Italian",
+    "request": {
+      "sentence": "Mi piace molto questa città.",
+      "target_language": "Italian",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["Mi piace molto questa città."],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "it-003",
+    "language": "Italian",
+    "request": {
+      "sentence": "Loro è felici.",
+      "target_language": "Italian",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["Loro sono felici."],
+      "acceptable_error_types": ["conjugation", "grammar", "number_agreement"]
+    }
+  },
+  {
+    "id": "ja-001",
+    "language": "Japanese",
+    "request": {
+      "sentence": "私は東京を住んでいます。",
+      "target_language": "Japanese",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["私は東京に住んでいます。"],
+      "acceptable_error_types": ["grammar", "word_choice"]
+    }
+  },
+  {
+    "id": "ja-002",
+    "language": "Japanese",
+    "request": {
+      "sentence": "私は学生です。",
+      "target_language": "Japanese",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["私は学生です。"],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "ja-003",
+    "language": "Japanese",
+    "request": {
+      "sentence": "水が飲みたいです。",
+      "target_language": "Japanese",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["水が飲みたいです。"],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "ja-004",
+    "language": "Japanese",
+    "request": {
+      "sentence": "私は寿司を食べるが好きです。",
+      "target_language": "Japanese",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["私は寿司を食べるのが好きです。"],
+      "acceptable_error_types": ["grammar", "missing_word"]
+    }
+  },
+  {
+    "id": "hi-001",
+    "language": "Hindi",
+    "request": {
+      "sentence": "वह एक अच्छा लड़की है।",
+      "target_language": "Hindi",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["वह एक अच्छी लड़की है।"],
+      "acceptable_error_types": ["gender_agreement", "grammar"]
+    }
+  },
+  {
+    "id": "hi-002",
+    "language": "Hindi",
+    "request": {
+      "sentence": "मैं हर रोज़ स्कूल जाता हूँ।",
+      "target_language": "Hindi",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["मैं हर रोज़ स्कूल जाता हूँ।"],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "hi-003",
+    "language": "Hindi",
+    "request": {
+      "sentence": "वे लड़का खेल रहा है।",
+      "target_language": "Hindi",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["वह लड़का खेल रहा है।"],
+      "acceptable_error_types": ["grammar", "number_agreement", "word_choice"]
+    }
+  },
+  {
+    "id": "ko-001",
+    "language": "Korean",
+    "request": {
+      "sentence": "저는 학교에 가요.",
+      "target_language": "Korean",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["저는 학교에 가요."],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "ko-002",
+    "language": "Korean",
+    "request": {
+      "sentence": "저는 밥이 먹어요.",
+      "target_language": "Korean",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["저는 밥을 먹어요."],
+      "acceptable_error_types": ["grammar", "word_choice"]
+    }
+  },
+  {
+    "id": "ko-003",
+    "language": "Korean",
+    "request": {
+      "sentence": "저는 한국어를 공부해요.",
+      "target_language": "Korean",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["저는 한국어를 공부해요."],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "te-001",
+    "language": "Telugu",
+    "request": {
+      "sentence": "నేను నిన్న సినిమా చూశాను.",
+      "target_language": "Telugu",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": true,
+      "acceptable_corrections": ["నేను నిన్న సినిమా చూశాను."],
+      "acceptable_error_types": []
+    }
+  },
+  {
+    "id": "te-002",
+    "language": "Telugu",
+    "request": {
+      "sentence": "అతను బడికి వెళ్తుంది.",
+      "target_language": "Telugu",
+      "native_language": "English"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["అతను బడికి వెళ్తాడు."],
+      "acceptable_error_types": ["conjugation", "gender_agreement", "grammar"]
+    }
+  },
+  {
+    "id": "en-001",
+    "language": "English",
+    "request": {
+      "sentence": "She don't like coffee.",
+      "target_language": "English",
+      "native_language": "Spanish"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": ["She doesn't like coffee.", "She does not like coffee."],
+      "acceptable_error_types": ["conjugation", "grammar"]
+    }
+  },
+  {
+    "id": "en-002",
+    "language": "English",
+    "request": {
+      "sentence": "I have lived here since three years.",
+      "target_language": "English",
+      "native_language": "Spanish"
+    },
+    "expected": {
+      "is_correct": false,
+      "acceptable_corrections": [
+        "I have lived here for three years.",
+        "I have lived here since three years ago."
+      ],
+      "acceptable_error_types": ["word_choice", "grammar"]
+    }
+  }
+]

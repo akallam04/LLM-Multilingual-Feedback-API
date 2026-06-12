@@ -27,3 +27,12 @@ Thumbs.db
 
 # Docker
 *.log
+
+# Tooling caches
+.ruff_cache/
+
+# Generated eval reports (regenerate with: make eval)
+evals/results.md
+
+# Local tooling
+.claude/
